@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>벼 보험료 계산 연습</title>
+
+<style>
+body{
+    font-family: sans-serif;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 15px;
+}
+
+.card{
+    border:1px solid #ddd;
+    border-radius:10px;
+    padding:20px;
+    margin-top:20px;
+}
+
+button{
+    padding:10px 15px;
+    margin-top:10px;
+    cursor:pointer;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    font-size:16px;
+    box-sizing:border-box;
+}
+
+.success{
+    color:green;
+    font-weight:bold;
+}
+
+.fail{
+    color:red;
+    font-weight:bold;
+}
+
+hr{
+    margin:15px 0;
+}
+</style>
+</head>
+<body>
+
+<h1>🌾 벼 보험료 계산 연습</h1>
+
+<button onclick="generateProblem()">문제 생성</button>
+
+<div id="problem"></div>
+
+<script>
+
+let premium = 0;
+
+function rand(min,max){
+    return Math.random()*(max-min)+min;
+}
+
+function generateProblem(){
+
+    const area =
+        Math.floor(rand(5000,50001));
+
+    const yieldFactor =
+        rand(0.55,0.70);
+
+    let yieldKg =
+        area * yieldFactor;
+
+    yieldKg =
+        Math.floor(yieldKg/1000)*1000;
+
+    const price = 2100;
+
+    let insuredAmount =
+        yieldKg * price;
+
+    insuredAmount =
+        Math.floor(insuredAmount/1000)*1000;
+
+    const rate =
+        Math.floor(rand(4,9));
+
+    premium =
+        insuredAmount * (rate/100);
+
+    premium =
+        Math.floor(premium/100)*100;
+
+    document.getElementById("problem").innerHTML = `
+        <div class="card">
+
+            <h3>문제</h3>
+
+            <p><b>재배면적</b> :
+            ${area.toLocaleString()}㎡</p>
+
+            <p><b>평년수확량</b> :
+            ${yieldKg.toLocaleString()}kg</p>
+
+            <p><b>가입가격</b> :
+            ${price.toLocaleString()}원/kg</p>
+
+            <p><b>보험가입금액</b> :
+            ${insuredAmount.toLocaleString()}원</p>
+
+            <p><b>보험요율</b> :
+            ${rate}%</p>
+
+            <hr>
+
+            <p><b>보험료는 얼마인가?</b></p>
+
+            <input
+                id="answer"
+                type="number"
+                placeholder="보험료 입력">
+
+            <button onclick="checkAnswer()">
+                정답 확인
+            </button>
+
+            <div id="result"></div>
+
+        </div>
+    `;
+}
+
+function checkAnswer(){
+
+    const answer =
+        Number(
+            document.getElementById("answer").value
+        );
+
+    const result =
+        document.getElementById("result");
+
+    if(answer === premium){
+
+        result.innerHTML =
+            `<p class="success">
+            ✅ 정답입니다!
+            </p>`;
+
+    }else{
+
+        result.innerHTML =
+            `<p class="fail">
+            ❌ 오답입니다.
+            </p>
+            <p>
+            정답 :
+            ${premium.toLocaleString()}원
+            </p>`;
+    }
+}
+
+</script>
+
+</body>
+</html>
